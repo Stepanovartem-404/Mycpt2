@@ -1,0 +1,95 @@
+<?php
+/*
+Plugin Name: My CPT Plugin
+Description: Создает пользовательский тип контента "Продукты" и таксономии "Для взрослых" и "Для детей".
+Version: 1.0
+Author: Artem Stepanov
+*/
+
+// Регистрация пользовательского типа контента "Продукты"
+function my_cpt_register_product() {
+    $labels = array(
+        'name'               => 'Продукты',
+        'singular_name'      => 'Продукт',
+        'menu_name'          => 'Продукты',
+        'add_new'            => 'Добавить новый',
+        'add_new_item'       => 'Добавить новый продукт',
+        'edit_item'          => 'Редактировать продукт',
+        'new_item'           => 'Новый продукт',
+        'view_item'          => 'Просмотреть продукт',
+        'search_items'       => 'Поиск продуктов',
+        'not_found'          => 'Продукты не найдены',
+        'not_found_in_trash' => 'Продукты не найдены в корзине',
+    );
+
+    $args = array(
+        'labels'              => $labels,
+        'public'              => true,
+        'has_archive'         => true,
+        'publicly_queryable'  => true,
+        'query_var'           => true,
+        'rewrite'             => array( 'slug' => 'products' ),
+        'capability_type'     => 'post',
+        'menu_position'       => 5,
+        'supports'            => array( 'title', 'editor', 'thumbnail', 'custom-fields' ),
+    );
+
+    register_post_type( 'product', $args );
+}
+add_action( 'init', 'my_cpt_register_product' );
+
+// Регистрация таксономий "Для взрослых" и "Для детей"
+function my_cpt_register_taxonomies() {
+    $labels = array(
+        'name'              => 'Для взрослых',
+        'singular_name'     => 'Для взрослых',
+        'search_items'      => 'Поиск взрослых',
+        'all_items'         => 'Все взрослые',
+        'parent_item'       => 'Родительская взрослая категория',
+        'parent_item_colon' => 'Родительская взрослая категория:',
+        'edit_item'         => 'Редактировать взрослую категорию',
+        'update_item'       => 'Обновить взрослую категорию',
+        'add_new_item'      => 'Добавить новую взрослую категорию',
+        'new_item_name'     => 'Название новой взрослой категории',
+        'menu_name'         => 'Для взрослых',
+    );
+
+    $args = array(
+        'labels'            => $labels,
+        'hierarchical'      => true,
+        'public'            => true,
+        'show_ui'           => true,
+        'show_admin_column' => true,
+        'query_var'         => true,
+        'rewrite'           => array( 'slug' => 'for-adults' ),
+    );
+
+    register_taxonomy( 'for_adults', array( 'product' ), $args );
+
+    $labels = array(
+        'name'              => 'Для детей',
+        'singular_name'     => 'Для детей',
+        'search_items'      => 'Поиск детей',
+        'all_items'         => 'Все дети',
+        'parent_item'       => 'Родительская детская категория',
+        'parent_item_colon' => 'Родительская детская категория:',
+        'edit_item'         => 'Редактировать детскую категорию',
+        'update_item'       => 'Обновить детскую категорию',
+        'add_new_item'      => 'Добавить новую детскую категорию',
+        'new_item_name'     => 'Название новой детской категории',
+        'menu_name'         => 'Для детей',
+    );
+
+    $args = array(
+        'labels'            => $labels,
+        'hierarchical'      => true,
+        'public'            => true,
+        'show_ui'           => true,
+        'show_admin_column' => true,
+        'query_var'         => true,
+        'rewrite'           => array( 'slug' => 'for-kids' ),
+    );
+
+    register_taxonomy( 'for_kids', array( 'product' ), $args );
+}
+add_action( 'init', 'my_cpt_register_taxonomies' );
